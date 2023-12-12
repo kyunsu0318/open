@@ -1,0 +1,53 @@
+import cv2
+import os
+
+def capture_frames(video_path, output_folder, num_frames=500):
+    # 동영상 파일 열기
+    cap = cv2.VideoCapture(video_path)
+    
+    # 프레임 총 수
+    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    
+    # 프레임 간격 계산
+    interval = total_frames // num_frames
+    
+    # 이미지를 저장할 폴더 생성
+    os.makedirs(output_folder, exist_ok=True)
+    
+    # 이미지 캡쳐
+    for i in range(num_frames):
+        # 프레임 인덱스 계산
+        frame_index = i * interval
+        
+        # 해당 인덱스의 프레임 읽기
+        cap.set(cv2.CAP_PROP_POS_FRAMES, frame_index)
+        ret, frame = cap.read()
+        
+        # 이미지 파일로 저장
+        image_path = os.path.join(output_folder, f"frame_{i+1}.jpg")
+        cv2.imwrite(image_path, frame)
+        
+        print(f"Captured frame {i+1}/{num_frames}")
+    
+    # 동영상 파일 닫기
+    cap.release()
+
+if __name__ == "__main__":
+    # 동영상 파일 경로 설정
+    video_path_1 = "/home/kyunsu/cbnu/IMG_6544.mov"
+    video_path_2 = "/home/kyunsu/cbnu/IMG_6547.mov"
+    
+    # 이미지를 저장할 폴더 설정
+    # 이미지를 저장할 폴더 설정
+    output_folder_1 = "/home/kyunsu/some/directory/output_folder_1"
+    output_folder_2 = "/home/kyunsu/some/directory/output_folder_2"
+
+    
+    # 이미지 캡쳐 수 설정
+    num_frames = 500
+    
+    # 동영상 1 이미지 캡쳐
+    capture_frames(video_path_1, output_folder_1, num_frames)
+    
+    # 동영상 2 이미지 캡쳐
+    capture_frames(video_path_2, output_folder_2, num_frames)
